@@ -6,4 +6,8 @@
     <RootNamespace>scr_legacy_api_hmac</RootNamespace>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Flurl" Version="2.7.1" />
+    <PackageReference Include="Flurl.Http" Version="2.3.2" />
+  </ItemGroup>
 </Project>
