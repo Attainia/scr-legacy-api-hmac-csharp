@@ -10,8 +10,16 @@ namespace scr_legacy_api_hmac {
     class Program {
         
         public static void Main(string[] args) {
+
+            var yourAPIKey = "apiKey";
+            var yourSecretKey ="secretKey";
+            var apiLocation = "https://apilocation/";
+            var projectLocation = "api/1.0/Projects/12345/Departments";
+            //We should have provided you these variables
+
             Console.WriteLine(RunExampleCredentials());
-            Console.WriteLine(CallAPI(new HttpClient(), "yourAPIKey", "yourSecretKey", "https://apilocation/", "api/1.0/Projects/12345/Departments").GetAwaiter().GetResult());
+            Console.WriteLine(CallAPI(new HttpClient(), yourAPIKey, yourSecretKey, apiLocation, projectLocation).GetAwaiter().GetResult());
+        
         }
 
         public static async Task<string> CallAPI(HttpClient client, string apiKey, string secret, string host, string requestURI) {
@@ -21,6 +29,7 @@ namespace scr_legacy_api_hmac {
                 var timestampString = GetNowInISOFormat();
 
                 var authorizationHeaderValue = CreateAuthorizationString(apiKey, secret, "GET", contentType, requestURI, timestampString);
+                
 
                 var response = await fullUrl
                     .WithHeader("att-api-timestamp", timestampString)
@@ -28,6 +37,9 @@ namespace scr_legacy_api_hmac {
                     .WithHeader("Content-Type", contentType)
                     .WithHeader("Accept", contentType)
                     .GetAsync();
+                
+
+                Console.WriteLine(authorizationHeaderValue);
 
                 response.EnsureSuccessStatusCode();
                 string responseBodyAsText = await response.Content.ReadAsStringAsync();
@@ -40,13 +52,14 @@ namespace scr_legacy_api_hmac {
             return null;
         }
 
+        //Test authorization string creation
         public static string RunExampleCredentials() {
-            var authString = CreateAuthorizationString("yourAPIKey",
-                                                       "yourSecretKey",
+            var authString = CreateAuthorizationString("apiKey",
+                                                       "secretKey",
                                                        "GET",
                                                        "application/json",
                                                        "api/1.0/Projects/12345/Departments",
-                                                       "2018-06-11T17:05:31-0700");
+                                                       "2018-07-12T14:57:16+02:00");
             return authString;
         }
 
@@ -59,9 +72,10 @@ namespace scr_legacy_api_hmac {
             var encoding = new System.Text.ASCIIEncoding();
             byte[] secretBytes = encoding.GetBytes(secret);
             string canonicalString = string.Format("{0}\n{1}\n{2}\n{3}", httpVerb, contentType, requestURI, timestampString);
-
+            Console.WriteLine("Canonicalstring pre convert: \n"+ canonicalString);
             using (var sha = new HMACSHA256(secretBytes)) {
                 canonicalString = Convert.ToBase64String(sha.ComputeHash(encoding.GetBytes(canonicalString)));
+                Console.WriteLine("CannonicalString: " + canonicalString);
             }
 
             return string.Format("AttAPI {0}:{1}", apiKey, canonicalString);
