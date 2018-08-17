@@ -2,7 +2,6 @@
 using System.Net.Http;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
-
 using Flurl.Http;
 
 
@@ -18,11 +17,12 @@ namespace scr_legacy_api_hmac {
             //We should have provided you these variables
 
             Console.WriteLine(RunExampleCredentials());
-            Console.WriteLine(CallAPI(new HttpClient(), yourAPIKey, yourSecretKey, apiLocation, projectLocation).GetAwaiter().GetResult());
+            FlurlClient client = new FlurlClient();
+            Console.WriteLine(CallAPI(client.WithTimeout(new TimeSpan(1,0,0)) , yourAPIKey, yourSecretKey, apiLocation, projectLocation).GetAwaiter().GetResult());
         
         }
 
-        public static async Task<string> CallAPI(HttpClient client, string apiKey, string secret, string host, string requestURI) {
+        public static async Task<string> CallAPI(FlurlClient client, string apiKey, string secret, string host, string requestURI) {
             try {
                 var contentType = "application/json";
                 var fullUrl = $"{host}{requestURI}";
