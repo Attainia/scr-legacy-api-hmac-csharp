@@ -11,14 +11,13 @@ namespace scr_legacy_api_hmac {
         public static void Main(string[] args) {
             
             // These variables should be provided by Attainia
-            var yourAPIKey = "apiKey";
-            var yourSecretKey ="secretKey";
-            var apiLocation = "https://apilocation/";
+            var yourAPIKey = "YOURAPIKEY";
+            var yourSecretKey ="YOURAPISECRET";
+            var apiLocation = "https://phx.attainia.com/";
             var projectLocation = "api/1.0/Projects/12345/Departments";
-            var timeout = new TimeSpan(1,0,0);
+            var oneHourTimeout  = new TimeSpan(1,0,0);
 
-            Console.WriteLine(RunExampleCredentials());
-            FlurlClient client = new FlurlClient().WithTimeout(timeout);
+            FlurlClient client = new FlurlClient().WithTimeout(oneHourTimeout);
             Console.WriteLine(CallAPI(client, yourAPIKey, yourSecretKey, apiLocation, projectLocation).GetAwaiter().GetResult());
         
         }
@@ -51,17 +50,6 @@ namespace scr_legacy_api_hmac {
             }
 
             return null;
-        }
-
-        //Test authorization string creation
-        public static string RunExampleCredentials() {
-            var authString = CreateAuthorizationString("apiKey",
-                                                       "secretKey",
-                                                       "GET",
-                                                       "application/json",
-                                                       "api/1.0/Projects/12345/Departments",
-                                                       "2018-07-12T14:57:16+02:00");
-            return authString;
         }
 
         public static string GetNowInISOFormat() {
