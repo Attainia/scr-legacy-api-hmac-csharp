@@ -14,11 +14,12 @@ namespace scr_legacy_api_hmac {
             var yourSecretKey ="secretKey";
             var apiLocation = "https://apilocation/";
             var projectLocation = "api/1.0/Projects/12345/Departments";
+            var timeout = new TimeSpan(1,0,0);
             //We should have provided you these variables
 
             Console.WriteLine(RunExampleCredentials());
             FlurlClient client = new FlurlClient();
-            Console.WriteLine(CallAPI(client.WithTimeout(new TimeSpan(1,0,0)) , yourAPIKey, yourSecretKey, apiLocation, projectLocation).GetAwaiter().GetResult());
+            Console.WriteLine(CallAPI(client.WithTimeout(timeout), yourAPIKey, yourSecretKey, apiLocation, projectLocation).GetAwaiter().GetResult());
         
         }
 
