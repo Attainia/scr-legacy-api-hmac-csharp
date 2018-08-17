@@ -18,8 +18,8 @@ namespace scr_legacy_api_hmac {
             //We should have provided you these variables
 
             Console.WriteLine(RunExampleCredentials());
-            FlurlClient client = new FlurlClient();
-            Console.WriteLine(CallAPI(client.WithTimeout(timeout), yourAPIKey, yourSecretKey, apiLocation, projectLocation).GetAwaiter().GetResult());
+            FlurlClient client = new FlurlClient().WithTimeout(timeout);
+            Console.WriteLine(CallAPI(client, yourAPIKey, yourSecretKey, apiLocation, projectLocation).GetAwaiter().GetResult());
         
         }
 
