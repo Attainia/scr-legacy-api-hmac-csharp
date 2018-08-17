@@ -9,16 +9,17 @@ namespace scr_legacy_api_hmac {
     class Program {
         
         public static void Main(string[] args) {
-
+            
+            // These variables should be provided by Attainia
             var yourAPIKey = "apiKey";
             var yourSecretKey ="secretKey";
             var apiLocation = "https://apilocation/";
             var projectLocation = "api/1.0/Projects/12345/Departments";
-            //We should have provided you these variables
+            var timeout = new TimeSpan(1,0,0);
 
             Console.WriteLine(RunExampleCredentials());
-            FlurlClient client = new FlurlClient();
-            Console.WriteLine(CallAPI(client.WithTimeout(new TimeSpan(1,0,0)) , yourAPIKey, yourSecretKey, apiLocation, projectLocation).GetAwaiter().GetResult());
+            FlurlClient client = new FlurlClient().WithTimeout(timeout);
+            Console.WriteLine(CallAPI(client, yourAPIKey, yourSecretKey, apiLocation, projectLocation).GetAwaiter().GetResult());
         
         }
 
