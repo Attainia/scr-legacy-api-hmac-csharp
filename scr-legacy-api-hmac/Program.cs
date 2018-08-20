@@ -11,18 +11,18 @@ namespace scr_legacy_api_hmac {
         public static void Main(string[] args) {
             
             // These variables should be provided by Attainia
-            var yourAPIKey = "YOURAPIKEY";
-            var yourSecretKey ="YOURAPISECRET";
+            var yourAPIKey = "KEY";
+            var yourSecretKey ="SECRET";
             var apiLocation = "https://phx.attainia.com/";
-            var projectLocation = "api/1.0/Projects/12345/Departments";
+            var projectLocation = "api/1.0/Projects/12345/items";
             var oneHourTimeout  = new TimeSpan(1,0,0);
+            var client = new FlurlClient();
 
-            FlurlClient client = new FlurlClient().WithTimeout(oneHourTimeout);
-            Console.WriteLine(CallAPI(client, yourAPIKey, yourSecretKey, apiLocation, projectLocation).GetAwaiter().GetResult());
+            Console.WriteLine(CallAPI(oneHourTimeout, yourAPIKey, yourSecretKey, apiLocation, projectLocation).GetAwaiter().GetResult());
         
         }
 
-        public static async Task<string> CallAPI(FlurlClient client, string apiKey, string secret, string host, string requestURI) {
+        public static async Task<string> CallAPI(TimeSpan timeout, string apiKey, string secret, string host, string requestURI) {
             try {
                 var contentType = "application/json";
                 var fullUrl = $"{host}{requestURI}";
@@ -36,6 +36,7 @@ namespace scr_legacy_api_hmac {
                     .WithHeader("authorization", authorizationHeaderValue)
                     .WithHeader("Content-Type", contentType)
                     .WithHeader("Accept", contentType)
+                    .WithTimeout(timeout) //TIMEOUT SET HERE. TO BE CHANGED LATER
                     .GetAsync();
                 
 
